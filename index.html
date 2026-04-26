@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Seguimiento de Cometidos · OVDAS</title>
+  <meta name="description" content="Visor de seguimiento de cometidos funcionarios OVDAS — SERNAGEOMIN." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-mark">
+        <svg viewBox="0 0 32 32" width="28" height="28" aria-hidden="true">
+          <path d="M16 3 L29 27 H3 Z" fill="#dc2626" stroke="#7f1d1d" stroke-width="1.5" stroke-linejoin="round"/>
+          <path d="M16 3 L19 12 L16 16 L13 12 Z" fill="#fbbf24" opacity="0.95"/>
+          <circle cx="16" cy="20" r="2" fill="#fef3c7"/>
+        </svg>
+      </div>
+      <div class="brand-text">
+        <h1>Seguimiento de Cometidos</h1>
+        <span class="brand-sub">OVDAS · RNVV · SERNAGEOMIN</span>
+      </div>
+    </div>
+    <div class="kpis" id="kpis"></div>
+    <div class="topbar-actions">
+      <span class="legend-pill estado-en_terreno">● En terreno</span>
+      <span class="legend-pill estado-planificado">● Planificado</span>
+      <span class="legend-pill estado-completado">● Completado</span>
+    </div>
+  </header>
+
+  <main class="layout">
+    <aside class="sidebar">
+      <div class="filters">
+        <div class="filter-group">
+          <label>Estado</label>
+          <div class="chip-row" id="filtro-estado">
+            <button class="chip active" data-estado="todos">Todos</button>
+            <button class="chip" data-estado="en_terreno">En terreno</button>
+            <button class="chip" data-estado="planificado">Planificado</button>
+            <button class="chip" data-estado="completado">Completado</button>
+          </div>
+        </div>
+        <div class="filter-group">
+          <label for="filtro-volcan">Volcán</label>
+          <select id="filtro-volcan"><option value="todos">Todos los volcanes</option></select>
+        </div>
+        <div class="filter-group">
+          <label for="filtro-busqueda">Buscar funcionario / patente / objetivo</label>
+          <input type="search" id="filtro-busqueda" placeholder="Ej: Vidal, JZKC70, mantención..." />
+        </div>
+      </div>
+
+      <div class="lista-header">
+        <span id="contador-cometidos">0 cometidos</span>
+      </div>
+      <div class="lista" id="lista-cometidos"></div>
+
+      <footer class="sidebar-footer">
+        <p>Capa de cobertura celular: <a href="https://www.subtel.gob.cl/mapadigital/" target="_blank" rel="noopener">SUBTEL · Mapas Digitales</a></p>
+        <p>Cartografía base: OpenStreetMap · Esri World Imagery</p>
+      </footer>
+    </aside>
+
+    <section class="map-wrap">
+      <div id="map"></div>
+      <div class="map-overlay-controls">
+        <div class="control-block">
+          <strong>Cobertura 4G (SUBTEL nov-2025)</strong>
+          <label><input type="checkbox" data-operador="entel"    /> Entel</label>
+          <label><input type="checkbox" data-operador="movistar" /> Movistar</label>
+          <label><input type="checkbox" data-operador="claro"    /> Claro</label>
+          <label><input type="checkbox" data-operador="wom"      /> WOM</label>
+        </div>
+        <div class="control-block">
+          <strong>Capas</strong>
+          <label><input type="checkbox" id="toggle-volcanes" checked /> Volcanes monitoreados</label>
+          <label><input type="checkbox" id="toggle-rutas"    checked /> Rutas de cometidos</label>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div id="detalle-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="detalle-titulo">
+    <div class="modal-content">
+      <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+      <div id="detalle-cuerpo"></div>
+    </div>
+  </div>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+  <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

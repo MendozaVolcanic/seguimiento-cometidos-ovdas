@@ -1,0 +1,17 @@
+{
+  "volcanes": [
+    { "nombre": "Laguna del Maule",       "lat": -36.058, "lon": -70.495, "region": "Maule",        "alerta": "Amarilla" },
+    { "nombre": "Nevados de Chillán",     "lat": -36.860, "lon": -71.378, "region": "Ñuble",        "alerta": "Amarilla" },
+    { "nombre": "Antuco",                 "lat": -37.406, "lon": -71.349, "region": "Biobío",       "alerta": "Verde"    },
+    { "nombre": "Copahue",                "lat": -37.856, "lon": -71.183, "region": "Biobío",       "alerta": "Amarilla" },
+    { "nombre": "Lonquimay",              "lat": -38.379, "lon": -71.587, "region": "La Araucanía", "alerta": "Verde"    },
+    { "nombre": "Llaima",                 "lat": -38.692, "lon": -71.733, "region": "La Araucanía", "alerta": "Verde"    },
+    { "nombre": "Villarrica",             "lat": -39.420, "lon": -71.939, "region": "La Araucanía", "alerta": "Amarilla" },
+    { "nombre": "Quetrupillán",           "lat": -39.500, "lon": -71.700, "region": "La Araucanía", "alerta": "Verde"    },
+    { "nombre": "Mocho-Choshuenco",       "lat": -39.927, "lon": -72.027, "region": "Los Ríos",     "alerta": "Verde"    },
+    { "nombre": "Osorno",                 "lat": -41.100, "lon": -72.493, "region": "Los Lagos",    "alerta": "Verde"    },
+    { "nombre": "Calbuco",                "lat": -41.331, "lon": -72.614, "region": "Los Lagos",    "alerta": "Verde"    },
+    { "nombre": "Hudson",                 "lat": -45.900, "lon": -72.967, "region": "Aysén",        "alerta": "Verde"    }
+  ],
+  "ovdas": { "nombre": "OVDAS — Temuco", "lat": -38.7359, "lon": -72.5904 }
+}

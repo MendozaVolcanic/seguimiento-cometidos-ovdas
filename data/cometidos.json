@@ -1,0 +1,334 @@
+{
+  "_meta": {
+    "fuente": "Ficha real de cometido OVDAS (2026-02-10) + 11 fichas ficticias generadas para desarrollo del visor.",
+    "centro_costo": "2801",
+    "depto": "RNVV / OVDAS",
+    "actualizado": "2026-04-26"
+  },
+  "cometidos": [
+    {
+      "id": "COM-2026-001",
+      "estado": "completado",
+      "tipo": "Mantenimiento correctivo",
+      "objetivo": "Mantenimiento correctivo en sitios de Laguna del Maule.",
+      "volcan": "Laguna del Maule",
+      "volcan_coords": [-36.058, -70.495],
+      "fecha_salida": "2026-02-10",
+      "fecha_regreso": "2026-02-13",
+      "dias_100": 3,
+      "dias_40": 1,
+      "viatico_total": 285736,
+      "patente": "JZKC70",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Claudio Vidal", "rut": "15244568-7", "celular": "+56 9 8123 4567" },
+      "acompanantes": [
+        { "nombre": "Eduardo Rogel", "rol": "Conductor", "rut": "12876543-2", "celular": "+56 9 8765 4321" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-02-10", "lugar": "Traslado Temuco → Laguna del Maule", "coords": [-36.058, -70.495], "actividad": "Preparación de camioneta y traslado a campamento.", "pernocte": true, "señal": "nula" },
+        { "dia": 2, "fecha": "2026-02-11", "lugar": "Sitio Puelche",   "coords": [-36.041, -70.528], "actividad": "Traslado en zodiac. Mantenimiento correctivo en estación Puelche.",   "pernocte": true, "señal": "nula" },
+        { "dia": 3, "fecha": "2026-02-12", "lugar": "Sitio Coloradas", "coords": [-36.083, -70.460], "actividad": "Traslado en zodiac. Cambio de sensor sismológico en Coloradas.",     "pernocte": true, "señal": "nula" },
+        { "dia": 4, "fecha": "2026-02-13", "lugar": "Retorno a Temuco","coords": [-38.7359,-72.5904],"actividad": "Retorno.",                                                            "pernocte": false,"señal": "ok" }
+      ],
+      "riesgos": ["Altura geográfica", "Frío extremo", "Conducción en cordillera", "Navegación en zodiac"],
+      "epp": ["Casco", "Antiparras", "Guantes térmicos", "Chaleco salvavidas", "Ropa de abrigo grado polar"],
+      "contacto_emergencia": { "nombre": "Jefe RNVV", "telefono": "+56 45 229 7100" },
+      "observaciones": "Traslado en camioneta de servicio patente JZKC70. Coordinación con don Eduardo Rogel."
+    },
+    {
+      "id": "COM-2026-002",
+      "estado": "completado",
+      "tipo": "Instalación de equipo",
+      "objetivo": "Instalación de nueva estación de banda ancha en flanco N del Villarrica.",
+      "volcan": "Villarrica",
+      "volcan_coords": [-39.420, -71.939],
+      "fecha_salida": "2026-02-24",
+      "fecha_regreso": "2026-02-26",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "RXBT45",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Camila Tapia",  "rut": "16544221-9", "celular": "+56 9 5544 1122" },
+      "acompanantes": [
+        { "nombre": "Felipe Sanhueza", "rol": "Técnico electrónico", "rut": "17889033-K", "celular": "+56 9 6677 8899" },
+        { "nombre": "Pedro Cárcamo",   "rol": "Conductor",            "rut": "13442987-1", "celular": "+56 9 9988 7766" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-02-24", "lugar": "Pucón",            "coords": [-39.272, -71.978], "actividad": "Coordinación con CONAF y pernocte.", "pernocte": true,  "señal": "ok" },
+        { "dia": 2, "fecha": "2026-02-25", "lugar": "Refugio Villarrica","coords": [-39.398, -71.952], "actividad": "Ascenso con carga, instalación sismómetro y panel solar.", "pernocte": true, "señal": "parcial" },
+        { "dia": 3, "fecha": "2026-02-26", "lugar": "Retorno a Temuco","coords": [-38.7359,-72.5904], "actividad": "Descenso y retorno.", "pernocte": false, "señal": "ok" }
+      ],
+      "riesgos": ["Altura geográfica", "Caída de roca", "Gases volcánicos"],
+      "epp": ["Casco", "Máscara antigás", "Crampones", "Piolet", "Arnés"],
+      "contacto_emergencia": { "nombre": "CONAF Pucón", "telefono": "+56 45 244 3781" },
+      "observaciones": "Permiso CONAF Parque Nacional Villarrica gestionado el 2026-02-15."
+    },
+    {
+      "id": "COM-2026-003",
+      "estado": "completado",
+      "tipo": "Muestreo geoquímico",
+      "objetivo": "Muestreo de gases y aguas termales en Nevados de Chillán.",
+      "volcan": "Nevados de Chillán",
+      "volcan_coords": [-36.860, -71.378],
+      "fecha_salida": "2026-03-04",
+      "fecha_regreso": "2026-03-07",
+      "dias_100": 3, "dias_40": 1, "viatico_total": 285736,
+      "patente": "GHKR82",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Andrés Pavez",  "rut": "14998223-6", "celular": "+56 9 7766 5544" },
+      "acompanantes": [
+        { "nombre": "María José Reyes", "rol": "Geoquímica",  "rut": "18223440-5", "celular": "+56 9 4433 2211" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-03-04", "lugar": "Termas de Chillán",      "coords": [-36.910, -71.408], "actividad": "Toma de muestras en sector termal SE.",     "pernocte": true,  "señal": "ok"      },
+        { "dia": 2, "fecha": "2026-03-05", "lugar": "Cráter Arrau",           "coords": [-36.870, -71.376], "actividad": "Muestreo MultiGAS en cráter activo.",       "pernocte": true,  "señal": "nula"    },
+        { "dia": 3, "fecha": "2026-03-06", "lugar": "Sector Aguas Calientes", "coords": [-36.892, -71.354], "actividad": "Muestreo de fumarolas y aguas.",            "pernocte": true,  "señal": "parcial" },
+        { "dia": 4, "fecha": "2026-03-07", "lugar": "Retorno",                "coords": [-38.7359,-72.5904],"actividad": "Retorno a Temuco.",                         "pernocte": false, "señal": "ok"      }
+      ],
+      "riesgos": ["Gases tóxicos (SO₂, H₂S)", "Caída a cráter", "Hipotermia"],
+      "epp": ["Máscara antigás", "Detector de gases", "Casco", "Cuerda"],
+      "contacto_emergencia": { "nombre": "Centro de Esquí Nevados", "telefono": "+56 42 220 6000" },
+      "observaciones": "Coordinación previa con concesionaria del sector termal."
+    },
+    {
+      "id": "COM-2026-004",
+      "estado": "completado",
+      "tipo": "Mantenimiento preventivo",
+      "objetivo": "Cambio de baterías y paneles solares en estaciones de Llaima.",
+      "volcan": "Llaima",
+      "volcan_coords": [-38.692, -71.733],
+      "fecha_salida": "2026-03-12",
+      "fecha_regreso": "2026-03-14",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "JZKC70",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Ricardo Soto", "rut": "13778442-K", "celular": "+56 9 8899 0011" },
+      "acompanantes": [
+        { "nombre": "Diego Muñoz",  "rol": "Técnico electrónico", "rut": "19002544-3", "celular": "+56 9 5566 7788" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-03-12", "lugar": "Curacautín",     "coords": [-38.439, -71.881], "actividad": "Pernocte y carga de equipos.",          "pernocte": true,  "señal": "ok"      },
+        { "dia": 2, "fecha": "2026-03-13", "lugar": "Estación LLAIMA","coords": [-38.703, -71.745], "actividad": "Cambio de baterías y mantención solar.","pernocte": true,  "señal": "parcial" },
+        { "dia": 3, "fecha": "2026-03-14", "lugar": "Retorno",        "coords": [-38.7359,-72.5904],"actividad": "Retorno a Temuco.",                     "pernocte": false, "señal": "ok"      }
+      ],
+      "riesgos": ["Caminos forestales en mal estado", "Frío"],
+      "epp": ["Casco", "Guantes dieléctricos", "Botas de seguridad"],
+      "contacto_emergencia": { "nombre": "CONAF Curacautín", "telefono": "+56 45 288 1184" },
+      "observaciones": ""
+    },
+    {
+      "id": "COM-2026-005",
+      "estado": "completado",
+      "tipo": "Reconocimiento",
+      "objetivo": "Reconocimiento de nuevo emplazamiento para estación en flanco S de Mocho-Choshuenco.",
+      "volcan": "Mocho-Choshuenco",
+      "volcan_coords": [-39.927, -72.027],
+      "fecha_salida": "2026-03-23",
+      "fecha_regreso": "2026-03-25",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "PXJG14",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Valentina Olate", "rut": "17554290-2", "celular": "+56 9 6655 4433" },
+      "acompanantes": [],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-03-23", "lugar": "Panguipulli",        "coords": [-39.643, -72.336], "actividad": "Coordinación logística.",      "pernocte": true,  "señal": "ok"   },
+        { "dia": 2, "fecha": "2026-03-24", "lugar": "Flanco S Mocho",     "coords": [-39.952, -72.012], "actividad": "Prospección de sitio.",        "pernocte": true,  "señal": "nula" },
+        { "dia": 3, "fecha": "2026-03-25", "lugar": "Retorno",            "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                     "pernocte": false, "señal": "ok"   }
+      ],
+      "riesgos": ["Senderos no consolidados", "Cruce de río"],
+      "epp": ["Casco", "Botas waterproof"],
+      "contacto_emergencia": { "nombre": "Carabineros Choshuenco", "telefono": "133" },
+      "observaciones": "Cometido individual. Reporta cada 4 h por radio HF."
+    },
+    {
+      "id": "COM-2026-006",
+      "estado": "completado",
+      "tipo": "Instalación de equipo",
+      "objetivo": "Instalación de cámara de monitoreo visual en Calbuco.",
+      "volcan": "Calbuco",
+      "volcan_coords": [-41.331, -72.614],
+      "fecha_salida": "2026-04-01",
+      "fecha_regreso": "2026-04-03",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "RXBT45",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Jorge Maldonado", "rut": "15008771-4", "celular": "+56 9 4422 1133" },
+      "acompanantes": [
+        { "nombre": "Ignacio Barría", "rol": "Conductor", "rut": "13556644-7", "celular": "+56 9 7711 8822" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-04-01", "lugar": "Puerto Varas",   "coords": [-41.317, -72.985], "actividad": "Pernocte y coordinación con CONAF.","pernocte": true, "señal": "ok"  },
+        { "dia": 2, "fecha": "2026-04-02", "lugar": "Mirador Calbuco","coords": [-41.295, -72.594], "actividad": "Instalación de cámara y enlace 4G.","pernocte": true, "señal": "ok"  },
+        { "dia": 3, "fecha": "2026-04-03", "lugar": "Retorno",        "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                          "pernocte": false,"señal": "ok"  }
+      ],
+      "riesgos": ["Lluvia y barro", "Caída en sendero"],
+      "epp": ["Botas", "Capa de agua", "Casco"],
+      "contacto_emergencia": { "nombre": "CONAF Puerto Varas", "telefono": "+56 65 248 6402" },
+      "observaciones": "Sitio con cobertura 4G — ideal para enlace en tiempo real."
+    },
+    {
+      "id": "COM-2026-007",
+      "estado": "completado",
+      "tipo": "Mantenimiento correctivo",
+      "objetivo": "Reparación de antena dañada por viento en Lonquimay.",
+      "volcan": "Lonquimay",
+      "volcan_coords": [-38.379, -71.587],
+      "fecha_salida": "2026-04-08",
+      "fecha_regreso": "2026-04-10",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "GHKR82",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Felipe Sanhueza", "rut": "17889033-K", "celular": "+56 9 6677 8899" },
+      "acompanantes": [
+        { "nombre": "Diego Muñoz", "rol": "Técnico electrónico", "rut": "19002544-3", "celular": "+56 9 5566 7788" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-04-08", "lugar": "Malalcahuello",     "coords": [-38.471, -71.560], "actividad": "Pernocte.", "pernocte": true, "señal": "parcial" },
+        { "dia": 2, "fecha": "2026-04-09", "lugar": "Estación LONQ",     "coords": [-38.395, -71.604], "actividad": "Reemplazo de antena yagi y reorientación.", "pernocte": true, "señal": "nula" },
+        { "dia": 3, "fecha": "2026-04-10", "lugar": "Retorno",           "coords": [-38.7359,-72.5904],"actividad": "Retorno.", "pernocte": false, "señal": "ok" }
+      ],
+      "riesgos": ["Vientos fuertes", "Trabajo en altura (torre)"],
+      "epp": ["Arnés full body", "Casco", "Línea de vida"],
+      "contacto_emergencia": { "nombre": "Carabineros Malalcahuello", "telefono": "133" },
+      "observaciones": ""
+    },
+    {
+      "id": "COM-2026-008",
+      "estado": "en_terreno",
+      "tipo": "Mantenimiento preventivo",
+      "objetivo": "Mantenimiento integral de red sismológica del Copahue.",
+      "volcan": "Copahue",
+      "volcan_coords": [-37.856, -71.183],
+      "fecha_salida": "2026-04-23",
+      "fecha_regreso": "2026-04-28",
+      "dias_100": 5, "dias_40": 1, "viatico_total": 453816,
+      "patente": "JZKC70",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Claudio Vidal", "rut": "15244568-7", "celular": "+56 9 8123 4567" },
+      "acompanantes": [
+        { "nombre": "Andrés Pavez",  "rol": "Geofísico",            "rut": "14998223-6", "celular": "+56 9 7766 5544" },
+        { "nombre": "Eduardo Rogel", "rol": "Conductor",            "rut": "12876543-2", "celular": "+56 9 8765 4321" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-04-23", "lugar": "Los Ángeles",         "coords": [-37.471, -72.354], "actividad": "Carga y pernocte.",                          "pernocte": true,  "señal": "ok"      },
+        { "dia": 2, "fecha": "2026-04-24", "lugar": "Caviahue (frontera)", "coords": [-37.875, -71.054], "actividad": "Cruce frontera, pernocte.",                  "pernocte": true,  "señal": "parcial" },
+        { "dia": 3, "fecha": "2026-04-25", "lugar": "Estación COPA-1",     "coords": [-37.842, -71.205], "actividad": "Mantención sismómetro broadband y GNSS.",   "pernocte": true,  "señal": "nula"    },
+        { "dia": 4, "fecha": "2026-04-26", "lugar": "Estación COPA-2",     "coords": [-37.871, -71.150], "actividad": "Cambio de baterías y limpieza de paneles.", "pernocte": true,  "señal": "nula"    },
+        { "dia": 5, "fecha": "2026-04-27", "lugar": "Estación COPA-3",     "coords": [-37.830, -71.232], "actividad": "Verificación de telemetría.",               "pernocte": true,  "señal": "parcial" },
+        { "dia": 6, "fecha": "2026-04-28", "lugar": "Retorno",             "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                                  "pernocte": false, "señal": "ok"      }
+      ],
+      "riesgos": ["Cruce internacional", "Gases volcánicos", "Frío", "Caminos cerrados por nieve"],
+      "epp": ["Máscara antigás", "Crampones", "Ropa polar", "Casco"],
+      "contacto_emergencia": { "nombre": "Carabineros Pino Hachado", "telefono": "+56 45 297 7600" },
+      "observaciones": "Cometido binacional. Documentación migratoria gestionada con PDI."
+    },
+    {
+      "id": "COM-2026-009",
+      "estado": "en_terreno",
+      "tipo": "Muestreo geoquímico",
+      "objetivo": "Muestreo de cenizas recientes en flanco E de Villarrica.",
+      "volcan": "Villarrica",
+      "volcan_coords": [-39.420, -71.939],
+      "fecha_salida": "2026-04-25",
+      "fecha_regreso": "2026-04-27",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "PXJG14",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "María José Reyes", "rut": "18223440-5", "celular": "+56 9 4433 2211" },
+      "acompanantes": [],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-04-25", "lugar": "Coñaripe",            "coords": [-39.555, -71.957], "actividad": "Pernocte.",                                "pernocte": true,  "señal": "ok"   },
+        { "dia": 2, "fecha": "2026-04-26", "lugar": "Flanco E Villarrica", "coords": [-39.428, -71.890], "actividad": "Toma de 12 muestras de tefra reciente.",    "pernocte": true,  "señal": "nula" },
+        { "dia": 3, "fecha": "2026-04-27", "lugar": "Retorno",             "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                                "pernocte": false, "señal": "ok"   }
+      ],
+      "riesgos": ["Gases volcánicos", "Caminata individual"],
+      "epp": ["Máscara antigás", "Casco", "Linterna frontal"],
+      "contacto_emergencia": { "nombre": "CONAF Coñaripe", "telefono": "+56 63 231 7440" },
+      "observaciones": "Reporta posición vía SPOT cada 3 h."
+    },
+    {
+      "id": "COM-2026-010",
+      "estado": "planificado",
+      "tipo": "Instalación de equipo",
+      "objetivo": "Instalación de estación GNSS de campaña en Quetrupillán.",
+      "volcan": "Quetrupillán",
+      "volcan_coords": [-39.500, -71.700],
+      "fecha_salida": "2026-05-05",
+      "fecha_regreso": "2026-05-08",
+      "dias_100": 3, "dias_40": 1, "viatico_total": 285736,
+      "patente": "RXBT45",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Camila Tapia", "rut": "16544221-9", "celular": "+56 9 5544 1122" },
+      "acompanantes": [
+        { "nombre": "Valentina Olate", "rol": "Geofísica",         "rut": "17554290-2", "celular": "+56 9 6655 4433" },
+        { "nombre": "Pedro Cárcamo",   "rol": "Conductor",         "rut": "13442987-1", "celular": "+56 9 9988 7766" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-05-05", "lugar": "Pucón",              "coords": [-39.272, -71.978], "actividad": "Coordinación CONAF y pernocte.","pernocte": true,  "señal": "ok"      },
+        { "dia": 2, "fecha": "2026-05-06", "lugar": "Sendero Quetrupillán","coords": [-39.488, -71.715], "actividad": "Aproximación a sitio GNSS.",     "pernocte": true,  "señal": "parcial" },
+        { "dia": 3, "fecha": "2026-05-07", "lugar": "Sitio QTRU-N",       "coords": [-39.511, -71.690], "actividad": "Instalación de antena y dataloger.","pernocte": true,"señal": "nula"    },
+        { "dia": 4, "fecha": "2026-05-08", "lugar": "Retorno",            "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                       "pernocte": false, "señal": "ok"      }
+      ],
+      "riesgos": ["Altura geográfica", "Sendero no marcado"],
+      "epp": ["Casco", "Botas de trekking", "Carpa de altura"],
+      "contacto_emergencia": { "nombre": "CONAF Villarrica", "telefono": "+56 45 244 3781" },
+      "observaciones": "Equipo solicitado a IPGP-Francia."
+    },
+    {
+      "id": "COM-2026-011",
+      "estado": "planificado",
+      "tipo": "Mantenimiento preventivo",
+      "objetivo": "Inspección y mantención de red Hudson (zona austral).",
+      "volcan": "Hudson",
+      "volcan_coords": [-45.900, -72.967],
+      "fecha_salida": "2026-05-12",
+      "fecha_regreso": "2026-05-18",
+      "dias_100": 6, "dias_40": 1, "viatico_total": 537856,
+      "patente": "GHKR82",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Ricardo Soto", "rut": "13778442-K", "celular": "+56 9 8899 0011" },
+      "acompanantes": [
+        { "nombre": "Jorge Maldonado", "rol": "Geofísico",            "rut": "15008771-4", "celular": "+56 9 4422 1133" },
+        { "nombre": "Ignacio Barría",  "rol": "Conductor",            "rut": "13556644-7", "celular": "+56 9 7711 8822" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-05-12", "lugar": "Vuelo Temuco → Balmaceda", "coords": [-45.913, -71.689], "actividad": "Vuelo y traslado.",            "pernocte": true,  "señal": "ok"      },
+        { "dia": 2, "fecha": "2026-05-13", "lugar": "Coyhaique",                "coords": [-45.572, -72.068], "actividad": "Carga de equipos.",            "pernocte": true,  "señal": "ok"      },
+        { "dia": 3, "fecha": "2026-05-14", "lugar": "Puerto Ibáñez",            "coords": [-46.290, -71.928], "actividad": "Cruce ferry.",                 "pernocte": true,  "señal": "parcial" },
+        { "dia": 4, "fecha": "2026-05-15", "lugar": "Estación HUD-1",           "coords": [-45.913, -73.014], "actividad": "Mantención completa.",         "pernocte": true,  "señal": "nula"    },
+        { "dia": 5, "fecha": "2026-05-16", "lugar": "Estación HUD-2",           "coords": [-45.870, -72.880], "actividad": "Mantención completa.",         "pernocte": true,  "señal": "nula"    },
+        { "dia": 6, "fecha": "2026-05-17", "lugar": "Retorno Coyhaique",        "coords": [-45.572, -72.068], "actividad": "Retorno terrestre.",           "pernocte": true,  "señal": "ok"      },
+        { "dia": 7, "fecha": "2026-05-18", "lugar": "Vuelo Balmaceda → Temuco", "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                     "pernocte": false, "señal": "ok"      }
+      ],
+      "riesgos": ["Clima austral severo", "Aislamiento", "Cruce lacustre"],
+      "epp": ["Ropa polar grado expedición", "GPS", "Teléfono satelital", "Botiquín avanzado"],
+      "contacto_emergencia": { "nombre": "ONEMI Aysén", "telefono": "+56 67 221 1700" },
+      "observaciones": "Requiere equipo SPOT activado durante todo el cometido."
+    },
+    {
+      "id": "COM-2026-012",
+      "estado": "planificado",
+      "tipo": "Reconocimiento",
+      "objetivo": "Verificación post-actividad estromboliana en Antuco.",
+      "volcan": "Antuco",
+      "volcan_coords": [-37.406, -71.349],
+      "fecha_salida": "2026-05-20",
+      "fecha_regreso": "2026-05-22",
+      "dias_100": 2, "dias_40": 1, "viatico_total": 201696,
+      "patente": "PXJG14",
+      "vehiculo": "Camioneta OVDAS",
+      "jefe_cometido": { "nombre": "Andrés Pavez", "rut": "14998223-6", "celular": "+56 9 7766 5544" },
+      "acompanantes": [
+        { "nombre": "María José Reyes", "rol": "Geoquímica", "rut": "18223440-5", "celular": "+56 9 4433 2211" }
+      ],
+      "ruta": [
+        { "dia": 1, "fecha": "2026-05-20", "lugar": "Antuco (poblado)",   "coords": [-37.339, -71.687], "actividad": "Pernocte.",                                  "pernocte": true,  "señal": "ok"   },
+        { "dia": 2, "fecha": "2026-05-21", "lugar": "Sector Sierra Velluda","coords": [-37.448, -71.385],"actividad": "Reconocimiento visual + muestreo cenizas.",  "pernocte": true,  "señal": "nula" },
+        { "dia": 3, "fecha": "2026-05-22", "lugar": "Retorno",             "coords": [-38.7359,-72.5904],"actividad": "Retorno.",                                  "pernocte": false, "señal": "ok"   }
+      ],
+      "riesgos": ["Caída de proyectiles balísticos", "Frío"],
+      "epp": ["Casco", "Máscara antigás", "Antiparras", "Ropa térmica"],
+      "contacto_emergencia": { "nombre": "CONAF Laguna del Laja", "telefono": "+56 43 232 1086" },
+      "observaciones": "Coordinación con guardaparques CONAF Parque Nacional Laguna del Laja."
+    }
+  ]
+}
