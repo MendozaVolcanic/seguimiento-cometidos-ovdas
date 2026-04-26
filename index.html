@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -26,15 +26,26 @@
         <span class="brand-sub">OVDAS · RNVV · SERNAGEOMIN</span>
       </div>
     </div>
-    <div class="kpis" id="kpis"></div>
-    <div class="topbar-actions">
-      <span class="legend-pill estado-en_terreno">● En terreno</span>
-      <span class="legend-pill estado-planificado">● Planificado</span>
-      <span class="legend-pill estado-completado">● Completado</span>
+
+    <nav class="tabs" role="tablist">
+      <button class="tab active" data-view="mapa" role="tab">🗺 Mapa</button>
+      <button class="tab" data-view="timeline" role="tab">📅 Timeline</button>
+      <button class="tab" data-view="heatmap" role="tab">📊 Actividad</button>
+      <button class="tab" data-view="funcionarios" role="tab">👥 Funcionarios</button>
+    </nav>
+
+    <div class="topbar-right">
+      <div id="alertas-bell" class="alertas-bell" title="Alertas">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+        <span class="alertas-count" id="alertas-count">0</span>
+      </div>
+      <button id="btn-nuevo" class="btn-primary">+ Nuevo cometido</button>
+      <button id="btn-tema" class="btn-icon" title="Cambiar tema">🌙</button>
     </div>
   </header>
 
-  <main class="layout">
+  <!-- VISTA MAPA -->
+  <section class="view view-mapa active" data-view="mapa">
     <aside class="sidebar">
       <div class="filters">
         <div class="filter-group">
@@ -51,8 +62,12 @@
           <select id="filtro-volcan"><option value="todos">Todos los volcanes</option></select>
         </div>
         <div class="filter-group">
-          <label for="filtro-busqueda">Buscar funcionario / patente / objetivo</label>
-          <input type="search" id="filtro-busqueda" placeholder="Ej: Vidal, JZKC70, mantención..." />
+          <label for="filtro-busqueda">Buscar (nombre, RUT, patente, objetivo)</label>
+          <input type="search" id="filtro-busqueda" placeholder="Ej: Vidal, 15244568, JZKC70..." />
+        </div>
+        <div class="filter-group" id="filtro-funcionario-pill" style="display:none">
+          <span class="active-funcionario" id="filtro-funcionario-tag"></span>
+          <button class="btn-link" id="filtro-funcionario-clear">× quitar</button>
         </div>
       </div>
 
@@ -62,12 +77,11 @@
       <div class="lista" id="lista-cometidos"></div>
 
       <footer class="sidebar-footer">
-        <p>Capa de cobertura celular: <a href="https://www.subtel.gob.cl/mapadigital/" target="_blank" rel="noopener">SUBTEL · Mapas Digitales</a></p>
-        <p>Cartografía base: OpenStreetMap · Esri World Imagery</p>
+        <p>Cobertura celular: <a href="https://www.subtel.gob.cl/mapadigital/" target="_blank" rel="noopener">SUBTEL</a> · Bases: OSM, Esri, OpenTopoMap</p>
       </footer>
     </aside>
 
-    <section class="map-wrap">
+    <div class="map-wrap">
       <div id="map"></div>
       <div class="map-overlay-controls">
         <div class="control-block">
@@ -80,22 +94,139 @@
         <div class="control-block">
           <strong>Capas</strong>
           <label><input type="checkbox" id="toggle-volcanes" checked /> Volcanes monitoreados</label>
-          <label><input type="checkbox" id="toggle-rutas"    checked /> Rutas de cometidos</label>
+          <label><input type="checkbox" id="toggle-rutas" checked /> Rutas planificadas</label>
+          <label><input type="checkbox" id="toggle-tracks" checked /> Tracks SPOT (en terreno)</label>
+          <label><input type="checkbox" id="toggle-pasos" /> Pasos fronterizos</label>
+          <label><input type="checkbox" id="toggle-refugios" /> Refugios CONAF</label>
         </div>
       </div>
-    </section>
-  </main>
+    </div>
+  </section>
 
-  <div id="detalle-modal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="detalle-titulo">
+  <!-- VISTA TIMELINE -->
+  <section class="view view-timeline" data-view="timeline">
+    <div class="view-header">
+      <h2>Timeline de cometidos</h2>
+      <p class="view-sub">Vista horizontal por fecha. Útil para detectar solapamientos y planificar viáticos.</p>
+    </div>
+    <div class="timeline-wrap">
+      <div id="timeline"></div>
+    </div>
+  </section>
+
+  <!-- VISTA HEATMAP -->
+  <section class="view view-heatmap" data-view="heatmap">
+    <div class="view-header">
+      <h2>Actividad por volcán y mes</h2>
+      <p class="view-sub">Conteo de cometidos por volcán × mes (2026). Métrica útil para el plan anual.</p>
+    </div>
+    <div class="heatmap-wrap">
+      <div id="heatmap"></div>
+      <div class="heatmap-stats" id="heatmap-stats"></div>
+    </div>
+  </section>
+
+  <!-- VISTA FUNCIONARIOS -->
+  <section class="view view-funcionarios" data-view="funcionarios">
+    <div class="view-header">
+      <h2>Funcionarios — historial</h2>
+      <p class="view-sub">Días en terreno acumulados, viáticos totales y cometidos por funcionario.</p>
+    </div>
+    <div id="funcionarios-grid" class="funcionarios-grid"></div>
+  </section>
+
+  <!-- MODAL DETALLE -->
+  <div id="detalle-modal" class="modal hidden" role="dialog" aria-modal="true">
     <div class="modal-content">
-      <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+      <div class="modal-actions-top">
+        <button class="btn-secondary" id="btn-pdf">📄 Exportar PDF</button>
+        <button class="modal-close" id="modal-close" aria-label="Cerrar">×</button>
+      </div>
       <div id="detalle-cuerpo"></div>
     </div>
+  </div>
+
+  <!-- MODAL FORMULARIO -->
+  <div id="form-modal" class="modal hidden" role="dialog" aria-modal="true">
+    <div class="modal-content modal-form">
+      <button class="modal-close" id="form-close" aria-label="Cerrar">×</button>
+      <h2 id="form-titulo">Nuevo cometido</h2>
+      <p class="view-sub">Llene los campos. Al guardar se descarga el JSON con la nueva ficha incorporada (para hacer commit al repositorio).</p>
+
+      <form id="form-cometido">
+        <fieldset>
+          <legend>Identificación</legend>
+          <div class="form-grid">
+            <label>Volcán <select name="volcan" required></select></label>
+            <label>Tipo <select name="tipo" required>
+              <option>Mantenimiento correctivo</option>
+              <option>Mantenimiento preventivo</option>
+              <option>Instalación de equipo</option>
+              <option>Muestreo geoquímico</option>
+              <option>Reconocimiento</option>
+            </select></label>
+            <label>Estado <select name="estado" required>
+              <option value="planificado">Planificado</option>
+              <option value="en_terreno">En terreno</option>
+              <option value="completado">Completado</option>
+            </select></label>
+            <label>Patente <input name="patente" required pattern="[A-Z0-9]{6}" placeholder="JZKC70" /></label>
+            <label>Fecha salida <input name="fecha_salida" type="date" required /></label>
+            <label>Fecha regreso <input name="fecha_regreso" type="date" required /></label>
+            <label class="full">Objetivo <input name="objetivo" required maxlength="200" /></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Jefe de cometido</legend>
+          <div class="form-grid">
+            <label>Nombre <input name="jefe_nombre" required /></label>
+            <label>RUT <input name="jefe_rut" required pattern="[0-9]{7,8}-[0-9Kk]" placeholder="12345678-9" /></label>
+            <label>Celular <input name="jefe_celular" required placeholder="+56 9 ..." /></label>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>Acompañantes (opcional, separados por línea)</legend>
+          <textarea name="acompanantes" rows="3" placeholder="Nombre | rol | rut | celular&#10;Otra persona | Conductor | 12345678-9 | +56 9 1234 5678"></textarea>
+        </fieldset>
+
+        <fieldset>
+          <legend>Logística</legend>
+          <div class="form-grid">
+            <label>Días al 100% <input name="dias_100" type="number" min="0" required /></label>
+            <label>Días al 40% <input name="dias_40" type="number" min="0" required /></label>
+            <label>Viático total ($) <input name="viatico_total" type="number" min="0" required /></label>
+            <label class="full">Riesgos (separados por coma) <input name="riesgos" placeholder="Altura, Frío, Cruce internacional" /></label>
+            <label class="full">EPP (separados por coma) <input name="epp" placeholder="Casco, Máscara antigás, Crampones" /></label>
+            <label>Contacto emergencia <input name="emerg_nombre" /></label>
+            <label>Teléfono emergencia <input name="emerg_telefono" /></label>
+            <label class="full">Observaciones <textarea name="observaciones" rows="2"></textarea></label>
+          </div>
+        </fieldset>
+
+        <div class="form-actions">
+          <button type="button" class="btn-secondary" id="form-cancel">Cancelar</button>
+          <button type="submit" class="btn-primary">Generar JSON y descargar</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- PANEL ALERTAS -->
+  <div id="alertas-panel" class="alertas-panel hidden">
+    <div class="alertas-header">
+      <h3>Alertas activas</h3>
+      <button class="modal-close" id="alertas-close">×</button>
+    </div>
+    <div id="alertas-lista"></div>
   </div>
 
   <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
   <script src="https://unpkg.com/esri-leaflet@3.0.12/dist/esri-leaflet.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/dompurify@3.0.9/dist/purify.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script src="js/app.js"></script>
 </body>
 </html>

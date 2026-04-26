@@ -219,7 +219,16 @@
       "riesgos": ["Cruce internacional", "Gases volcánicos", "Frío", "Caminos cerrados por nieve"],
       "epp": ["Máscara antigás", "Crampones", "Ropa polar", "Casco"],
       "contacto_emergencia": { "nombre": "Carabineros Pino Hachado", "telefono": "+56 45 297 7600" },
-      "observaciones": "Cometido binacional. Documentación migratoria gestionada con PDI."
+      "observaciones": "Cometido binacional. Documentación migratoria gestionada con PDI.",
+      "tracks": [
+        { "ts": "2026-04-23T07:45:00", "lat": -37.471, "lon": -72.354, "bateria": 100, "tipo": "ok" },
+        { "ts": "2026-04-23T18:30:00", "lat": -37.471, "lon": -72.354, "bateria": 95,  "tipo": "check_in" },
+        { "ts": "2026-04-24T09:15:00", "lat": -37.875, "lon": -71.054, "bateria": 88,  "tipo": "ok" },
+        { "ts": "2026-04-24T19:00:00", "lat": -37.875, "lon": -71.054, "bateria": 80,  "tipo": "check_in" },
+        { "ts": "2026-04-25T08:00:00", "lat": -37.842, "lon": -71.205, "bateria": 72,  "tipo": "ok" },
+        { "ts": "2026-04-25T20:30:00", "lat": -37.842, "lon": -71.205, "bateria": 64,  "tipo": "check_in" },
+        { "ts": "2026-04-26T08:20:00", "lat": -37.871, "lon": -71.150, "bateria": 55,  "tipo": "ok" }
+      ]
     },
     {
       "id": "COM-2026-009",
@@ -243,7 +252,14 @@
       "riesgos": ["Gases volcánicos", "Caminata individual"],
       "epp": ["Máscara antigás", "Casco", "Linterna frontal"],
       "contacto_emergencia": { "nombre": "CONAF Coñaripe", "telefono": "+56 63 231 7440" },
-      "observaciones": "Reporta posición vía SPOT cada 3 h."
+      "observaciones": "Reporta posición vía SPOT cada 3 h.",
+      "tracks": [
+        { "ts": "2026-04-25T09:00:00", "lat": -39.555, "lon": -71.957, "bateria": 100, "tipo": "ok" },
+        { "ts": "2026-04-25T12:00:00", "lat": -39.555, "lon": -71.957, "bateria": 96,  "tipo": "ok" },
+        { "ts": "2026-04-25T18:00:00", "lat": -39.555, "lon": -71.957, "bateria": 90,  "tipo": "check_in" },
+        { "ts": "2026-04-26T07:30:00", "lat": -39.500, "lon": -71.920, "bateria": 82,  "tipo": "ok" },
+        { "ts": "2026-04-26T10:30:00", "lat": -39.428, "lon": -71.890, "bateria": 75,  "tipo": "ok" }
+      ]
     },
     {
       "id": "COM-2026-010",

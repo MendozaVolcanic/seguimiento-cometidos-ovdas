@@ -1,0 +1,19 @@
+{
+  "pasos_fronterizos": [
+    { "nombre": "Paso Pino Hachado",      "lat": -38.660, "lon": -71.044, "horario": "08:00–20:00", "altura": 1864 },
+    { "nombre": "Paso Mamuil Malal",      "lat": -39.564, "lon": -71.504, "horario": "08:00–20:00", "altura": 1207 },
+    { "nombre": "Paso Cardenal Samoré",   "lat": -40.731, "lon": -71.901, "horario": "08:00–20:00", "altura": 1321 },
+    { "nombre": "Paso Pehuenche",         "lat": -35.978, "lon": -70.394, "horario": "08:00–20:00", "altura": 2553 },
+    { "nombre": "Paso Pichachén",         "lat": -37.379, "lon": -71.118, "horario": "08:00–18:00", "altura": 2070 },
+    { "nombre": "Paso Icalma",            "lat": -38.804, "lon": -71.253, "horario": "08:00–20:00", "altura": 1303 },
+    { "nombre": "Paso Hua Hum",           "lat": -40.092, "lon": -71.677, "horario": "08:30–18:00", "altura": 659  }
+  ],
+  "refugios_conaf": [
+    { "nombre": "Refugio Pellaifa (Villarrica)",   "lat": -39.398, "lon": -71.952 },
+    { "nombre": "Refugio Llaima (Conguillío)",     "lat": -38.692, "lon": -71.733 },
+    { "nombre": "Refugio Antuco (Laguna del Laja)","lat": -37.448, "lon": -71.385 },
+    { "nombre": "Refugio Lonquimay (Malalcahuello)","lat":-38.471,"lon": -71.560 },
+    { "nombre": "Refugio Volcán Osorno",           "lat": -41.121, "lon": -72.494 },
+    { "nombre": "Refugio Termas de Chillán",       "lat": -36.910, "lon": -71.408 }
+  ]
+}
