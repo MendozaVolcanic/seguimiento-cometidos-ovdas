@@ -125,6 +125,7 @@ let layers = {
   tracks: L.layerGroup(),
   pasos: L.layerGroup(),
   refugios: L.layerGroup(),
+  frontera: L.layerGroup(),
   cobertura: {}
 };
 let cometidoSeleccionado = null;
@@ -224,6 +225,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     poblarVolcanesEnMapa();
     poblarFiltroVolcan();
     poblarFormularioVolcanes();
+    poblarFrontera();
     poblarPasosYRefugios();
     poblarCometidosEnMapa();
     renderLista();
@@ -306,6 +308,23 @@ function poblarFormularioVolcanes() {
     opt.value = v.nombre; opt.textContent = v.nombre;
     sel.appendChild(opt);
   });
+}
+
+function poblarFrontera() {
+  if (!contexto.frontera_cl_ar || contexto.frontera_cl_ar.length < 2) return;
+  // Línea principal — cinta gruesa con dashes para que se distinga del resto
+  L.polyline(contexto.frontera_cl_ar, {
+    color: '#fbbf24',
+    weight: 2.5,
+    opacity: 0.9,
+    dashArray: '10,6',
+    lineCap: 'round'
+  }).bindPopup(sanitize(`<strong>Frontera Chile — Argentina</strong><br><span style="font-size:0.72rem;color:#94a3b8">Aproximación de la divisoria de aguas. Al este de esta línea los datos de cobertura SUBTEL no aplican (Argentina no publica polígonos RF oficiales).</span>`)).addTo(layers.frontera);
+  // Sombra sutil del lado argentino para reforzar visualmente
+  const sombra = contexto.frontera_cl_ar.map(([lat, lon]) => [lat, lon + 0.08]);
+  L.polyline(sombra, {
+    color: '#fbbf24', weight: 1, opacity: 0.25, dashArray: '2,4'
+  }).addTo(layers.frontera);
 }
 
 function poblarPasosYRefugios() {
@@ -761,6 +780,7 @@ function bindUI() {
   document.getElementById('toggle-tracks').addEventListener('change', e => toggleLayer(layers.tracks, e.target.checked));
   document.getElementById('toggle-pasos').addEventListener('change', e => toggleLayer(layers.pasos, e.target.checked));
   document.getElementById('toggle-refugios').addEventListener('change', e => toggleLayer(layers.refugios, e.target.checked));
+  document.getElementById('toggle-frontera').addEventListener('change', e => toggleLayer(layers.frontera, e.target.checked));
 
   document.querySelectorAll('[data-operador]').forEach(cb => {
     cb.addEventListener('change', e => {
@@ -830,15 +850,24 @@ function reconstruirCoberturas() {
   const servicios = COBERTURA_SERVICIOS[coberturaTechActiva] || {};
   coberturaOperadoresActivos.forEach(op => {
     const meta = servicios[op];
-    if (!meta) return;  // sin servicio para este operador en esta tech
+    if (!meta) return;
     const layer = new ArcGISExportLayer(
       `${SUBTEL_BASE}/${meta.srv}/MapServer`,
-      0,                              // estos servicios tienen una sola layer (id=0)
+      0,
       { opacity: 0.78, color: COBERTURA_OPERADORES[op].rgb, className: 'cobertura-overlay' }
     );
     layers.cobertura[op] = layer;
     layer.addTo(map);
   });
+
+  // Auto-mostrar frontera CL-AR cuando hay cobertura activa para que el usuario
+  // entienda dónde se acaba el dato (Argentina no publica equivalente público).
+  const cb = document.getElementById('toggle-frontera');
+  if (coberturaOperadoresActivos.size > 0 && cb && !cb.checked) {
+    cb.checked = true;
+    layers.frontera.addTo(map);
+  }
+
   actualizarLeyendaCoberturas();
 }
 
@@ -863,19 +892,20 @@ function actualizarLeyendaCoberturas() {
   const info = document.getElementById('leyenda-coberturas-info');
   if (!info) return;
   const servicios = COBERTURA_SERVICIOS[coberturaTechActiva] || {};
+  const disclaimer = '<span class="leyenda-warn">⚠ Solo lado chileno. Argentina (ENACOM) no publica polígonos RF oficiales.</span>';
   if (activos.length === 0) {
     setHTML(info, '');
   } else if (activos.length === 1) {
     const op = activos[0];
     const meta = COBERTURA_OPERADORES[op];
     const fecha = (servicios[op] || {}).fecha || '';
-    setHTML(info, `<strong>${escapeHtml(meta.label)} · ${escapeHtml(coberturaTechActiva)} (${escapeHtml(fecha)})</strong>Zonas con cobertura según reporte oficial SUBTEL.`);
+    setHTML(info, `<strong>${escapeHtml(meta.label)} · ${escapeHtml(coberturaTechActiva)} (${escapeHtml(fecha)})</strong>Zonas con cobertura según reporte oficial SUBTEL.${disclaimer}`);
   } else {
     const tema = document.documentElement.getAttribute('data-theme');
     const explicacion = tema === 'dark'
       ? 'Donde se solapan operadores el color se aclara (mezcla aditiva).'
       : 'Donde se solapan operadores el color se oscurece (mezcla por multiplicación).';
-    setHTML(info, `<strong>${activos.length} operadores · ${escapeHtml(coberturaTechActiva)}</strong>${escapeHtml(explicacion)}`);
+    setHTML(info, `<strong>${activos.length} operadores · ${escapeHtml(coberturaTechActiva)}</strong>${escapeHtml(explicacion)}${disclaimer}`);
   }
 }
 

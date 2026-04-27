@@ -115,28 +115,45 @@ La primera ficha (`COM-2026-001`) es **real** — digitalización de la Ficha de
 
 ---
 
-## 📡 Cobertura celular oficial SUBTEL
+## 📡 Cobertura celular — fuentes y limitaciones
 
-Se consume directamente del servidor ArcGIS REST público de SUBTEL:
+### 🇨🇱 Chile — datos oficiales SUBTEL
 
-```
-https://licancabur.subtel.gob.cl/server/rest/services/Coberturas_dic_2023/MapServer
-```
+Cada combinación operador × tecnología (2G/3G/4G/5G) usa el servicio MapServer **más reciente públicamente disponible**, verificado capa por capa contra el servidor SUBTEL:
 
-Los layer IDs usados (4G consolidado por operador):
+| | **2G** | **3G** | **4G** | **5G** |
+|---|---|---|---|---|
+| **Entel**    | dic-2024 | dic-2024 | **jun-2025** | **jun-2025** |
+| **Claro**    | dic-2024 | dic-2024 | **jun-2025** | **jun-2025** |
+| **Movistar** | — | dic-2024 | dic-2024 | dic-2024 |
+| **WOM**      | — | dic-2024 | dic-2024 | dic-2024 |
 
-| Operador | Layer ID |
-|----------|----------|
-| Claro    | 33       |
-| Entel    | 36       |
-| Movistar | 40       |
-| WOM      | 43       |
+> **Nota Movistar/WOM 2G**: ambos operadores ya descontinuaron 2G en su catálogo público SUBTEL — consistente con el plan nacional de apagado de 2G.
 
-Acceso vía [`esri-leaflet`](https://github.com/Esri/esri-leaflet) con `dynamicMapLayer`. CORS está habilitado por SUBTEL para el dominio `*.github.io`.
+URL base: `https://licancabur.subtel.gob.cl/server/rest/services/<servicio>/MapServer/export`
 
-> **Nota técnica**: la primera versión apuntaba a las capas `<Operador>_4G_nov2025`, que en realidad son **ubicaciones de antenas (puntos)**, no áreas de cobertura. Las capas correctas son los polígonos consolidados de `Coberturas_dic_2023`. Mientras SUBTEL no publique una versión 2024+ consolidada, dic-2023 es la fuente oficial vigente.
+Acceso vía un layer custom (`ArcGISExportLayer`) que llama directamente al endpoint `/export` de ArcGIS REST. Se sobrescribe la simbología del server con el parámetro `dynamicLayers` para imponer un color consistente con la leyenda de la UI. CORS habilitado por SUBTEL para `*.github.io`.
+
+> **Por qué no se usan los `<Operador>_<Tech>_nov2025`**: pese al nombre, son **ubicaciones de antenas individuales (puntos)** — 6.276 puntos para Entel, 4.881 para Movistar, etc. No son polígonos de cobertura. Para cobertura real hay que ir a las versiones `_jun25` y `_Dic2024` que sí son polígonos.
 
 Fuente: [SUBTEL · Mapas de Cobertura Digital](https://www.subtel.gob.cl/mapadigital/)
+
+### 🇦🇷 Argentina — limitación conocida
+
+**No hay polígonos RF oficiales públicos**. Se investigó:
+
+| Fuente | Estado |
+|--------|--------|
+| [datosabiertos.enacom.gob.ar](https://datosabiertos.enacom.gob.ar/dashboards/19998/telefonia-movil/) | Solo tablas tabulares por localidad (CSV/JSON). No hay shapes. |
+| [indicadores.enacom.gob.ar/Mapas/conectividad](https://indicadores.enacom.gob.ar/Mapas/conectividad) | Mapa web ASP.NET WebForms con backend interno; no expone REST/WMS/GeoJSON. |
+| `geoserver.enacom.gob.ar` | DNS NXDOMAIN — es intranet ENACOM, no accesible desde internet pública. |
+| Sitios oficiales de Personal, Movistar AR, Claro AR | Apps web propias sin API pública o tiles consumibles. |
+
+Por eso el visor incluye una **línea de frontera Chile–Argentina** que se enciende automáticamente al activar capas de cobertura — para que admin entienda visualmente dónde se acaba el dato. Cualquier cometido binacional (ej. Copahue cruzando a Caviahue) **debe asumir cobertura desconocida del lado argentino** y planificar comunicación satelital.
+
+**Caminos para extender** (futuro):
+- 📡 **OpenCelliD** ([opencellid.org](https://www.opencellid.org/downloads.php)): base CSV crowdsourced de antenas con MCC=722 (Argentina) y MCC=730 (Chile). Licencia CC BY-SA, requiere token gratis. Genera puntos, no polígonos — habría que hacer buffers.
+- 📝 **Solicitud formal a ENACOM**: pedir por nota los shapefiles de cobertura declarada por operadores (informe administrativo bajo declaración jurada).
 
 ---
 

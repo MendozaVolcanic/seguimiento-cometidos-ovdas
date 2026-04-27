@@ -426,6 +426,18 @@ button { font-family: inherit; }
 }
 .leyenda-coberturas-info:empty { display: none; }
 .leyenda-coberturas-info strong { color: var(--text-soft); display: block; margin-bottom: 0.15rem; }
+.leyenda-warn {
+  display: block;
+  margin-top: 0.3rem;
+  padding: 0.3rem 0.4rem;
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.35);
+  border-radius: 4px;
+  color: #fbbf24;
+  font-size: 0.62rem;
+  line-height: 1.35;
+}
+[data-theme="light"] .leyenda-warn { color: #92400e; background: rgba(251, 191, 36, 0.15); }
 
 /* Multiplicación de capas: cuando se superponen 2+ operadores la zona se oscurece
    (suma de cobertura visible). En modo claro cambiamos a 'multiply'; en oscuro 'screen'
