@@ -369,6 +369,44 @@ button { font-family: inherit; }
 .control-block label:hover { color: var(--text); }
 .control-block input[type="checkbox"] { accent-color: var(--accent); }
 
+.tech-row {
+  display: flex;
+  gap: 0.25rem;
+  margin: 0.3rem 0 0.45rem;
+}
+.tech-chip {
+  flex: 1;
+  background: var(--bg);
+  color: var(--text-soft);
+  border: 1px solid var(--border);
+  padding: 0.3rem 0;
+  border-radius: 5px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  cursor: pointer;
+  letter-spacing: 0.04em;
+  transition: all 0.12s;
+}
+.tech-chip:hover { background: var(--card-hover); color: var(--text); }
+.tech-chip.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+  box-shadow: 0 0 0 1px var(--accent);
+}
+.control-block label.disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+.control-block label.disabled::after {
+  content: '— no disponible';
+  font-size: 0.6rem;
+  color: var(--text-dim);
+  margin-left: 0.3rem;
+  font-style: italic;
+}
+
 .op-swatch {
   display: inline-block;
   width: 12px; height: 12px;

@@ -1,14 +1,43 @@
 /* Seguimiento de Cometidos OVDAS — visor principal */
 
-// Servicio oficial SUBTEL — coberturas reales (polígonos), no antenas (puntos).
-// Layer IDs consolidados 4G por operador en el grupo "Coberturas_dic_2023".
-const SUBTEL_COBERTURA_URL = 'https://licancabur.subtel.gob.cl/server/rest/services/Coberturas_dic_2023/MapServer';
-const COBERTURA_LAYERS = {
-  entel:    { id: 36, color: '#2563eb', rgb: [37, 99, 235],  label: 'Entel' },
-  movistar: { id: 40, color: '#0d9488', rgb: [13, 148, 136], label: 'Movistar' },
-  claro:    { id: 33, color: '#dc2626', rgb: [220, 38, 38],  label: 'Claro' },
-  wom:      { id: 43, color: '#c026d3', rgb: [192, 38, 211], label: 'WOM' }
+// Coberturas oficiales SUBTEL — polígonos por operador y tecnología.
+// Para cada combinación se usa el servicio MÁS RECIENTE públicamente disponible.
+const SUBTEL_BASE = 'https://licancabur.subtel.gob.cl/server/rest/services';
+const COBERTURA_OPERADORES = {
+  entel:    { color: '#2563eb', rgb: [37, 99, 235],  label: 'Entel' },
+  movistar: { color: '#0d9488', rgb: [13, 148, 136], label: 'Movistar' },
+  claro:    { color: '#dc2626', rgb: [220, 38, 38],  label: 'Claro' },
+  wom:      { color: '#c026d3', rgb: [192, 38, 211], label: 'WOM' }
 };
+// Mapping operador × tecnología → nombre del servicio MapServer más reciente.
+// Verificado contra licancabur.subtel.gob.cl/server/rest/services el 2026-04-27.
+const COBERTURA_SERVICIOS = {
+  '4G': {
+    entel:    { srv: 'Entel_4G_jun25',       fecha: 'jun-2025'   },
+    claro:    { srv: 'Claro_4G_jun25',       fecha: 'jun-2025'   },
+    movistar: { srv: 'Movistar_4G_Dic2024',  fecha: 'dic-2024'   },
+    wom:      { srv: 'Wom_4G_Dic2024',       fecha: 'dic-2024'   }
+  },
+  '5G': {
+    entel:    { srv: 'Entel_5G_jun25',       fecha: 'jun-2025'   },
+    claro:    { srv: 'Claro_5G_jun25',       fecha: 'jun-2025'   },
+    movistar: { srv: 'Movistar_5G_Dic2024',  fecha: 'dic-2024'   },
+    wom:      { srv: 'Wom_5G_Dic2024',       fecha: 'dic-2024'   }
+  },
+  '3G': {
+    entel:    { srv: 'Entel_3G_Dic2024',     fecha: 'dic-2024'   },
+    movistar: { srv: 'Movistar_3G_Dic2024',  fecha: 'dic-2024'   },
+    claro:    { srv: 'Claro_3G_Dic2024',     fecha: 'dic-2024'   },
+    wom:      { srv: 'Wom_3G_Dic2024',       fecha: 'dic-2024'   }
+  },
+  '2G': {
+    entel:    { srv: 'Entel_2G_Dic2024',     fecha: 'dic-2024'   },
+    claro:    { srv: 'Claro_2G_Dic2024',     fecha: 'dic-2024'   }
+    // Movistar y WOM ya no operan/publican 2G — están descontinuando esa red.
+  }
+};
+let coberturaTechActiva = '4G';
+let coberturaOperadoresActivos = new Set();  // operadores tildados
 
 /* Custom Leaflet Layer — consume el endpoint /export de ArcGIS REST directamente
    con dynamicLayers para sobrescribir el renderer del server y forzar nuestro color
@@ -17,7 +46,7 @@ const ArcGISExportLayer = L.Layer.extend({
   initialize: function (url, layerId, options) {
     this._url = url;
     this._layerId = layerId;
-    L.setOptions(this, Object.assign({ opacity: 0.6, color: [0, 112, 255], className: '' }, options || {}));
+    L.setOptions(this, Object.assign({ opacity: 0.78, color: [0, 112, 255], className: '' }, options || {}));
   },
   onAdd: function (map) {
     this._map = map;
@@ -49,8 +78,8 @@ const ArcGISExportLayer = L.Layer.extend({
           type: 'simple',
           symbol: {
             type: 'esriSFS', style: 'esriSFSSolid',
-            color: [r, g, b, 200],
-            outline: { type: 'esriSLS', style: 'esriSLSSolid', color: [r, g, b, 255], width: 0.4 }
+            color: [r, g, b, 235],
+            outline: { type: 'esriSLS', style: 'esriSLSSolid', color: [r, g, b, 255], width: 1.2 }
           }
         }
       }
@@ -736,19 +765,19 @@ function bindUI() {
   document.querySelectorAll('[data-operador]').forEach(cb => {
     cb.addEventListener('change', e => {
       const op = e.target.dataset.operador;
-      if (e.target.checked) {
-        if (!layers.cobertura[op]) {
-          layers.cobertura[op] = new ArcGISExportLayer(
-            SUBTEL_COBERTURA_URL,
-            COBERTURA_LAYERS[op].id,
-            { opacity: 0.6, color: COBERTURA_LAYERS[op].rgb, className: 'cobertura-overlay' }
-          );
-        }
-        layers.cobertura[op].addTo(map);
-      } else if (layers.cobertura[op]) {
-        map.removeLayer(layers.cobertura[op]);
-      }
-      actualizarLeyendaCoberturas();
+      if (e.target.checked) coberturaOperadoresActivos.add(op);
+      else coberturaOperadoresActivos.delete(op);
+      reconstruirCoberturas();
+    });
+  });
+
+  document.querySelectorAll('[data-tech]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('[data-tech]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      coberturaTechActiva = btn.dataset.tech;
+      sincronizarDisponibilidadOperadores();
+      reconstruirCoberturas();
     });
   });
 
@@ -792,21 +821,61 @@ function bindUI() {
   document.getElementById('form-cometido').addEventListener('submit', enviarFormulario);
 }
 
+/* Construye/destruye las capas activas según la tecnología actual y los operadores tildados. */
+function reconstruirCoberturas() {
+  // Eliminar todas las activas actualmente
+  Object.values(layers.cobertura).forEach(l => { if (map.hasLayer(l)) map.removeLayer(l); });
+  layers.cobertura = {};
+
+  const servicios = COBERTURA_SERVICIOS[coberturaTechActiva] || {};
+  coberturaOperadoresActivos.forEach(op => {
+    const meta = servicios[op];
+    if (!meta) return;  // sin servicio para este operador en esta tech
+    const layer = new ArcGISExportLayer(
+      `${SUBTEL_BASE}/${meta.srv}/MapServer`,
+      0,                              // estos servicios tienen una sola layer (id=0)
+      { opacity: 0.78, color: COBERTURA_OPERADORES[op].rgb, className: 'cobertura-overlay' }
+    );
+    layers.cobertura[op] = layer;
+    layer.addTo(map);
+  });
+  actualizarLeyendaCoberturas();
+}
+
+/* Deshabilita visualmente los checkboxes de operadores que no tienen servicio
+   en la tecnología seleccionada (ej. Movistar/Wom no tienen 2G). */
+function sincronizarDisponibilidadOperadores() {
+  const servicios = COBERTURA_SERVICIOS[coberturaTechActiva] || {};
+  document.querySelectorAll('[data-operador]').forEach(cb => {
+    const op = cb.dataset.operador;
+    const disponible = !!servicios[op];
+    cb.disabled = !disponible;
+    cb.parentElement.classList.toggle('disabled', !disponible);
+    if (!disponible && cb.checked) {
+      cb.checked = false;
+      coberturaOperadoresActivos.delete(op);
+    }
+  });
+}
+
 function actualizarLeyendaCoberturas() {
   const activos = Object.keys(layers.cobertura).filter(op => map.hasLayer(layers.cobertura[op]));
   const info = document.getElementById('leyenda-coberturas-info');
   if (!info) return;
+  const servicios = COBERTURA_SERVICIOS[coberturaTechActiva] || {};
   if (activos.length === 0) {
     setHTML(info, '');
   } else if (activos.length === 1) {
-    const meta = COBERTURA_LAYERS[activos[0]];
-    setHTML(info, `<strong>${escapeHtml(meta.label)}</strong>Zonas con cobertura 4G según reporte oficial SUBTEL.`);
+    const op = activos[0];
+    const meta = COBERTURA_OPERADORES[op];
+    const fecha = (servicios[op] || {}).fecha || '';
+    setHTML(info, `<strong>${escapeHtml(meta.label)} · ${escapeHtml(coberturaTechActiva)} (${escapeHtml(fecha)})</strong>Zonas con cobertura según reporte oficial SUBTEL.`);
   } else {
     const tema = document.documentElement.getAttribute('data-theme');
     const explicacion = tema === 'dark'
       ? 'Donde se solapan operadores el color se aclara (mezcla aditiva).'
       : 'Donde se solapan operadores el color se oscurece (mezcla por multiplicación).';
-    setHTML(info, `<strong>${activos.length} operadores activos</strong>${escapeHtml(explicacion)}`);
+    setHTML(info, `<strong>${activos.length} operadores · ${escapeHtml(coberturaTechActiva)}</strong>${escapeHtml(explicacion)}`);
   }
 }
 
