@@ -10,6 +10,57 @@ const COBERTURA_LAYERS = {
   wom:      { id: 43, color: '#9333ea' }
 };
 
+/* Custom Leaflet Layer — consume el endpoint /export de ArcGIS REST directamente.
+   Más robusto que esri-leaflet.dynamicMapLayer para este servidor en particular. */
+const ArcGISExportLayer = L.Layer.extend({
+  initialize: function (url, layerId, options) {
+    this._url = url;
+    this._layerId = layerId;
+    L.setOptions(this, Object.assign({ opacity: 0.55 }, options || {}));
+  },
+  onAdd: function (map) {
+    this._map = map;
+    map.on('moveend zoomend resize', this._update, this);
+    this._update();
+  },
+  onRemove: function (map) {
+    if (this._image) map.removeLayer(this._image);
+    this._image = null;
+    map.off('moveend zoomend resize', this._update, this);
+  },
+  setOpacity: function (op) {
+    this.options.opacity = op;
+    if (this._image) this._image.setOpacity(op);
+  },
+  _update: function () {
+    const map = this._map;
+    if (!map) return;
+    const bounds = map.getBounds();
+    const size = map.getSize();
+    const params = new URLSearchParams({
+      bbox: `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`,
+      bboxSR: '4326',
+      imageSR: '3857',
+      size: `${size.x},${size.y}`,
+      format: 'png32',
+      transparent: 'true',
+      layers: `show:${this._layerId}`,
+      f: 'image'
+    });
+    const url = `${this._url}/export?${params.toString()}`;
+    const nuevo = L.imageOverlay(url, bounds, {
+      opacity: this.options.opacity,
+      interactive: false,
+      pane: 'overlayPane'
+    }).addTo(map);
+    // doble-buffer: remover el anterior cuando el nuevo cargó
+    const anterior = this._image;
+    this._image = nuevo;
+    nuevo.on('load', () => { if (anterior) map.removeLayer(anterior); });
+    nuevo.on('error', () => { if (this._image === nuevo) map.removeLayer(nuevo); });
+  }
+});
+
 // Hoy fijado al contexto del proyecto. Cambiar cuando avance la simulación.
 const HOY = new Date('2026-04-26T12:00:00');
 const UMBRAL_SIN_REPORTE_HORAS = 8;
@@ -668,14 +719,11 @@ function bindUI() {
       const op = e.target.dataset.operador;
       if (e.target.checked) {
         if (!layers.cobertura[op]) {
-          layers.cobertura[op] = L.esri.dynamicMapLayer({
-            url: SUBTEL_COBERTURA_URL,
-            layers: [COBERTURA_LAYERS[op].id],
-            opacity: 0.5,
-            format: 'png32',
-            transparent: true,
-            attribution: 'SUBTEL · Cobertura dic-2023'
-          });
+          layers.cobertura[op] = new ArcGISExportLayer(
+            SUBTEL_COBERTURA_URL,
+            COBERTURA_LAYERS[op].id,
+            { opacity: 0.55 }
+          );
         }
         layers.cobertura[op].addTo(map);
       } else if (layers.cobertura[op]) {
