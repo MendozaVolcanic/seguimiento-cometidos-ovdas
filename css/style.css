@@ -369,6 +369,32 @@ button { font-family: inherit; }
 .control-block label:hover { color: var(--text); }
 .control-block input[type="checkbox"] { accent-color: var(--accent); }
 
+.op-swatch {
+  display: inline-block;
+  width: 12px; height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(255,255,255,0.3);
+  margin-right: 0.1rem;
+  vertical-align: middle;
+  box-shadow: 0 0 0 1px rgba(0,0,0,0.2);
+}
+.leyenda-coberturas-info {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px dashed var(--border);
+  font-size: 0.65rem;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.leyenda-coberturas-info:empty { display: none; }
+.leyenda-coberturas-info strong { color: var(--text-soft); display: block; margin-bottom: 0.15rem; }
+
+/* Multiplicación de capas: cuando se superponen 2+ operadores la zona se oscurece
+   (suma de cobertura visible). En modo claro cambiamos a 'multiply'; en oscuro 'screen'
+   para mantener legibilidad. */
+.cobertura-overlay { mix-blend-mode: multiply; }
+[data-theme="dark"] .cobertura-overlay { mix-blend-mode: screen; }
+
 .volcan-marker { background: transparent; border: none; }
 .volcan-icon {
   display: flex; align-items: center; justify-content: center;

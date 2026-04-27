@@ -4,19 +4,20 @@
 // Layer IDs consolidados 4G por operador en el grupo "Coberturas_dic_2023".
 const SUBTEL_COBERTURA_URL = 'https://licancabur.subtel.gob.cl/server/rest/services/Coberturas_dic_2023/MapServer';
 const COBERTURA_LAYERS = {
-  claro:    { id: 33, color: '#dc2626' },
-  entel:    { id: 36, color: '#1e40af' },
-  movistar: { id: 40, color: '#0891b2' },
-  wom:      { id: 43, color: '#9333ea' }
+  entel:    { id: 36, color: '#2563eb', rgb: [37, 99, 235],  label: 'Entel' },
+  movistar: { id: 40, color: '#0d9488', rgb: [13, 148, 136], label: 'Movistar' },
+  claro:    { id: 33, color: '#dc2626', rgb: [220, 38, 38],  label: 'Claro' },
+  wom:      { id: 43, color: '#c026d3', rgb: [192, 38, 211], label: 'WOM' }
 };
 
-/* Custom Leaflet Layer — consume el endpoint /export de ArcGIS REST directamente.
-   Más robusto que esri-leaflet.dynamicMapLayer para este servidor en particular. */
+/* Custom Leaflet Layer — consume el endpoint /export de ArcGIS REST directamente
+   con dynamicLayers para sobrescribir el renderer del server y forzar nuestro color
+   de marca (consistente con la leyenda en el panel de control). */
 const ArcGISExportLayer = L.Layer.extend({
   initialize: function (url, layerId, options) {
     this._url = url;
     this._layerId = layerId;
-    L.setOptions(this, Object.assign({ opacity: 0.55 }, options || {}));
+    L.setOptions(this, Object.assign({ opacity: 0.6, color: [0, 112, 255], className: '' }, options || {}));
   },
   onAdd: function (map) {
     this._map = map;
@@ -37,6 +38,24 @@ const ArcGISExportLayer = L.Layer.extend({
     if (!map) return;
     const bounds = map.getBounds();
     const size = map.getSize();
+    const [r, g, b] = this.options.color;
+
+    // dynamicLayers: redefine la simbología en el server para imponer nuestro color
+    const dynamicLayers = [{
+      id: 1000 + this._layerId,
+      source: { type: 'mapLayer', mapLayerId: this._layerId },
+      drawingInfo: {
+        renderer: {
+          type: 'simple',
+          symbol: {
+            type: 'esriSFS', style: 'esriSFSSolid',
+            color: [r, g, b, 200],
+            outline: { type: 'esriSLS', style: 'esriSLSSolid', color: [r, g, b, 255], width: 0.4 }
+          }
+        }
+      }
+    }];
+
     const params = new URLSearchParams({
       bbox: `${bounds.getWest()},${bounds.getSouth()},${bounds.getEast()},${bounds.getNorth()}`,
       bboxSR: '4326',
@@ -44,16 +63,16 @@ const ArcGISExportLayer = L.Layer.extend({
       size: `${size.x},${size.y}`,
       format: 'png32',
       transparent: 'true',
-      layers: `show:${this._layerId}`,
+      dynamicLayers: JSON.stringify(dynamicLayers),
       f: 'image'
     });
     const url = `${this._url}/export?${params.toString()}`;
     const nuevo = L.imageOverlay(url, bounds, {
       opacity: this.options.opacity,
       interactive: false,
-      pane: 'overlayPane'
+      pane: 'overlayPane',
+      className: this.options.className
     }).addTo(map);
-    // doble-buffer: remover el anterior cuando el nuevo cargó
     const anterior = this._image;
     this._image = nuevo;
     nuevo.on('load', () => { if (anterior) map.removeLayer(anterior); });
@@ -722,13 +741,14 @@ function bindUI() {
           layers.cobertura[op] = new ArcGISExportLayer(
             SUBTEL_COBERTURA_URL,
             COBERTURA_LAYERS[op].id,
-            { opacity: 0.55 }
+            { opacity: 0.6, color: COBERTURA_LAYERS[op].rgb, className: 'cobertura-overlay' }
           );
         }
         layers.cobertura[op].addTo(map);
       } else if (layers.cobertura[op]) {
         map.removeLayer(layers.cobertura[op]);
       }
+      actualizarLeyendaCoberturas();
     });
   });
 
@@ -770,6 +790,24 @@ function bindUI() {
     if (e.target.id === 'form-modal') cerrarFormulario();
   });
   document.getElementById('form-cometido').addEventListener('submit', enviarFormulario);
+}
+
+function actualizarLeyendaCoberturas() {
+  const activos = Object.keys(layers.cobertura).filter(op => map.hasLayer(layers.cobertura[op]));
+  const info = document.getElementById('leyenda-coberturas-info');
+  if (!info) return;
+  if (activos.length === 0) {
+    setHTML(info, '');
+  } else if (activos.length === 1) {
+    const meta = COBERTURA_LAYERS[activos[0]];
+    setHTML(info, `<strong>${escapeHtml(meta.label)}</strong>Zonas con cobertura 4G según reporte oficial SUBTEL.`);
+  } else {
+    const tema = document.documentElement.getAttribute('data-theme');
+    const explicacion = tema === 'dark'
+      ? 'Donde se solapan operadores el color se aclara (mezcla aditiva).'
+      : 'Donde se solapan operadores el color se oscurece (mezcla por multiplicación).';
+    setHTML(info, `<strong>${activos.length} operadores activos</strong>${escapeHtml(explicacion)}`);
+  }
 }
 
 function toggleLayer(layer, visible) {
