@@ -1,11 +1,13 @@
 /* Seguimiento de Cometidos OVDAS — visor principal */
 
-const SUBTEL_BASE = 'https://licancabur.subtel.gob.cl/server/rest/services';
+// Servicio oficial SUBTEL — coberturas reales (polígonos), no antenas (puntos).
+// Layer IDs consolidados 4G por operador en el grupo "Coberturas_dic_2023".
+const SUBTEL_COBERTURA_URL = 'https://licancabur.subtel.gob.cl/server/rest/services/Coberturas_dic_2023/MapServer';
 const COBERTURA_LAYERS = {
-  entel:    `${SUBTEL_BASE}/Entel_4G_nov2025/MapServer`,
-  movistar: `${SUBTEL_BASE}/Movistar_4G_nov2025/MapServer`,
-  claro:    `${SUBTEL_BASE}/Claro_4G_nov2025/MapServer`,
-  wom:      `${SUBTEL_BASE}/Wom_4G_nov2025/MapServer`
+  claro:    { id: 33, color: '#dc2626' },
+  entel:    { id: 36, color: '#1e40af' },
+  movistar: { id: 40, color: '#0891b2' },
+  wom:      { id: 43, color: '#9333ea' }
 };
 
 // Hoy fijado al contexto del proyecto. Cambiar cuando avance la simulación.
@@ -667,7 +669,12 @@ function bindUI() {
       if (e.target.checked) {
         if (!layers.cobertura[op]) {
           layers.cobertura[op] = L.esri.dynamicMapLayer({
-            url: COBERTURA_LAYERS[op], opacity: 0.45, attribution: 'SUBTEL · nov-2025'
+            url: SUBTEL_COBERTURA_URL,
+            layers: [COBERTURA_LAYERS[op].id],
+            opacity: 0.5,
+            format: 'png32',
+            transparent: true,
+            attribution: 'SUBTEL · Cobertura dic-2023'
           });
         }
         layers.cobertura[op].addTo(map);
